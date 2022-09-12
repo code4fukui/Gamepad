@@ -1,0 +1,60 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
+
+<textarea id=ta style="width:95vw;height:80vh"></textarea>
+
+<script type="module">
+import { Gamepad } from "./Gamepad.js";
+
+const f = async () => {
+  const pads = Gamepad.get();
+  if (pads.length == 0) {
+    return;
+  }
+  console.log(pads)
+  const pad = pads[0];
+  //console.log(pad);
+  const j2s = (j) => JSON.stringify(j, null, 2);
+  const b2b = (b) => {
+    /*
+    return {
+      pressed: b.pressed,
+      touched: b.touched,
+      value: b.value,
+    };
+    */
+    return b.value;
+  };
+  ta.value = [pad.id, pad.mapping, pad.axes, pad.buttons.map(b => b2b(b))].map(j => j2s(j)).join("\n");
+
+  // test
+  // Joy-Con (R) (STANDARD GAMEPAD Vendor: 057e Product: 2007)'
+  //   axes Y(up/down), X(right/left)
+  //   buttons A, X, B, Y, SL, SR, 0, ZR, R, PLUS, PRESS, 0, 0, 0, 0, 0, HOME
+  // Joy-Con (L) (STANDARD GAMEPAD Vendor: 057e Product: 2006)
+  //   axes 0, 0, X(right/left), Y(bottom/up), 
+  //   button 
+  // Joy-Con L+R (STANDARD GAMEPAD Vendor: 057e Product: 200e)
+  //   axes: left X(right/left), left Y(down/up), right X(right/left), right Y(downlup)
+  //   buttons : B, A, Y, X, L, R, ZL, ZR, MINUS, PLUS, 0, left PUSH, 0, push LEFT, push RIGHT
+  //     left UP, left, right, teminal L, 
+  if (pad.buttons[0].pressed) {
+    const v = await pad.vibrationActuator.playEffect("dual-rumble", {
+      //startDelay: 0,
+      duration: 100,
+      weakMagnitude: 1.0,
+      //strongMagnitude: 1.0,
+    });
+    //console.log(v);
+  }
+  if (pad.buttons[1].pressed) {
+    const v = await pad.vibrationActuator.playEffect("dual-rumble", {
+      //startDelay: 0,
+      duration: 100,
+      weakMagnitude: 1.0,
+      //strongMagnitude: 1.0,
+    });
+    //console.log(v);
+  }
+};
+setInterval(f, 1000 / 60 * 5);
+</script>
