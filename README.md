@@ -1,5 +1,7 @@
 # Gamepad
 
+> 日本語のREADMEはこちらです: [README.ja.md](README.ja.md)
+
 A library for accessing gamepad/controller input in the browser.
 
 ## Demo
